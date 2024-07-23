@@ -1,4 +1,4 @@
-# Init le projet 
+# Init le back
 
 ## Les commandes Bash
 
