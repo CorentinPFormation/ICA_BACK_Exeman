@@ -7,3 +7,5 @@
 -npm install express pg
 
 -npm install pg --save
+
+-npm install cors
