@@ -51,6 +51,15 @@ app.get('/client', (req, res) => {
     res.send('içi, les id et les clients seront stocké')
 })
 
+app.get('/users', async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM users')
+        res.json(result.rows)
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Erreur serveur')
+    }
+})
 
 app.listen(port, () => {
     console.log(`ICA API listening on port ${port}`)
