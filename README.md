@@ -9,3 +9,5 @@
 -npm install pg --save
 
 -npm install cors
+
+-npm install jsonwebtoken bcryptjs cookie-parser
