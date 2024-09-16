@@ -10,4 +10,4 @@
 
 -npm install cors
 
--npm install jsonwebtoken bcryptjs cookie-parser
+-npm install jsonwebtoken bcryptjs
