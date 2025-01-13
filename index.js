@@ -143,6 +143,7 @@ app.post('/form_hook', verifyToken, async (req, res) => {
             cas_particulier,
             client, nom_spec, etatSpec
         } = req.body;
+
         const currentDate = new Date();
 
         const clientName = knex('client').where('id_client', client).select('name');
@@ -199,7 +200,7 @@ app.post('/form_hook', verifyToken, async (req, res) => {
                 opening_document_step: opening_document_step,
                 cas_fonctionnel: cas_fonctionnel,
                 cas_erreur: cas_derreur,
-                resultas_attentus: resultats_attendus,
+                resultats_attendus: resultats_attendus,
                 cas_tests_user: user,
                 cas_tests_phase: phase,
                 cas_tests_etape: etape,
@@ -237,7 +238,68 @@ app.get('/list-hook-by-user', verifyToken,  async (req, res) => {
         console.error(err);
         res.status(500).send('Erreur serveur')
     }
-})
+});
+
+app.get('/hook/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const hookData = await knex('hook')
+            .join('form_hook', 'hook.id_hook', '=', 'form_hook.id_hook')
+            .where('hook.id_hook', id)
+            .select(
+                'form_hook.nom_du_hook_fr',
+                'form_hook.nom_du_hook_en',
+                'form_hook.nom_du_hook_us',
+                'form_hook.nom_du_hook_es',
+                'form_hook.description_fr',
+                'form_hook.description_en',
+                'form_hook.description_us',
+                'form_hook.description_es',
+                'form_hook.event_nom_du_champ',
+                'form_hook.event_position',
+                'form_hook.autre_action',
+                'form_hook.opening_document_phase',
+                'form_hook.opening_document_step',
+                'form_hook.cas_fonctionnel',
+                'form_hook.cas_erreur',
+                'form_hook.resultats_attendus',
+                'form_hook.cas_tests_user',
+                'form_hook.cas_tests_phase',
+                'form_hook.cas_tests_etape',
+                'form_hook.client',
+                'form_hook.nom_spec',
+                'form_hook.cas_particulier',
+                'hook.state',
+            )
+            .first();
+
+        console.log(hookData);
+
+        console.log(await knex('form_document_type')
+            .join('document_types', 'form_document_type.id_document_types', '=', 'document_types.id_document_types')
+            .where('form_document_type.id_form_hook', id)
+            .select(
+                'document_types.other_document',
+                'document_types.purchase_order_po',
+                'document_types.purchase_requisition_pr',
+                'document_types.payable_invoice_nopo',
+                'document_types.payable_credit_note_nopo',
+                'document_types.sales_invoice_noso',
+                'document_types.sales_credit_note_noso',
+                'document_types.payable_invoice_pobased',
+            )
+            .first())
+
+        if (!hookData) {
+            return res.status(404).send('Spécification non trouvée');
+        }
+
+        res.json(hookData);
+    } catch (error) {
+        console.error('Erreur lors du chargement de la spécification:', error);
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
 
 app.listen(port, () => {
     console.log(`ICA API listening on port ${port}`)
