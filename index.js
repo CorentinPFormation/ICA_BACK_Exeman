@@ -77,6 +77,17 @@ app.get('/users', async (req, res) => {
     }
 })
 
+app.get('/livraison', async (req, res) => {
+    try {
+        const result = await knex('livraison').select('temps_livraison');
+        console.log(result)
+        res.json(result)
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Erreur serveur')
+    }
+})
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const http = require("node:http");
@@ -300,6 +311,44 @@ app.get('/hook/:id', async (req, res) => {
         res.status(500).json({ message: 'Erreur serveur' });
     }
 });
+
+app.get('/custom-interop-team', async (req, res) => {
+    try{
+        const token = req.headers.cookie.split(';').find(row => row.startsWith('ica_tk'))?.split('=')[1];
+
+        const decodedToken = jwt.verify(token, secretKey);
+        const userEmail = decodedToken.email;
+
+        const user = await knex('users').where('email', userEmail).first();
+        if (user.roles !== 'admin') {
+            return res.status(403).json('Vous n\'avez pas accès à cette page');
+        }
+
+        res.json(user);
+    } catch (error) {
+        console.error('Vous n\'avez pas accès a cette page', error);
+        res.status(500).json({ message: 'Un problème serveur est survenue' });
+    }
+});
+
+app.post('/update-livraison', async (req, res) => {
+    try {
+        const { updateLivraison } = req.body;
+
+        const updateDb = await knex('livraison').where({id_livraison : '1'}).update(
+            {
+                temps_livraison: updateLivraison
+            }
+        );
+
+        console.log('Le temps de livraison a bien été mis à jours');
+
+        res.sendStatus(204);
+    } catch (error) {
+        console.error('Erreur lors de l\'update:', error);
+        res.status(500).json({ message: 'Erreur lors de la mise à jours du temps de livraison' });
+    }
+})
 
 app.listen(port, () => {
     console.log(`ICA API listening on port ${port}`)
