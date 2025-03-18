@@ -17,7 +17,7 @@ const db = new Pool({
     user: 'corentin',
     password: 'coco11037',
     database: 'ica',
-    port: 5433,
+    port: 5432,
 })
 
 // routing

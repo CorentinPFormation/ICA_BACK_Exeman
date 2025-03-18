@@ -7,7 +7,7 @@ module.exports = {
     client: 'pg',
     connection: {
       host: 'localhost',
-      port: 5433,
+      port: 5432,
       user: 'corentin',
       password: 'coco11037',
       database: 'ica'
@@ -24,7 +24,7 @@ module.exports = {
     client: 'postgresql',
     connection: {
       database: 'ica',
-      port: 5433,
+      port: 5432,
       user:     'corentin',
       password: 'coco11037'
     },
@@ -41,7 +41,7 @@ module.exports = {
     client: 'postgresql',
     connection: {
       database: 'ica',
-      port: 5433,
+      port: 5432,
       user:     'corentin',
       password: 'coco11037'
     },

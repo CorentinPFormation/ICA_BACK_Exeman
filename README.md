@@ -1,13 +1,11 @@
-# Init le back
+# InteropCustomApp
 
-## Les commandes Bash
+Le projet est dans un ZIP car ce projet et deja rataché a un git privé, pour eviter tout problème j'ai choisi cette solution
 
--npm init
+## Installation
 
--npm install express pg
+run `npm install` pour installer toutes les dépendances nécéssaire au fonctionnement de l'application
 
--npm install pg --save
+## Run Project 
 
--npm install cors
-
--npm install jsonwebtoken bcryptjs
+Se rendre dans le répertoire ica-back puis run `node index.js`
