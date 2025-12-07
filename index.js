@@ -4,6 +4,8 @@ const app = express()
 const port = 3000
 const cors = require('cors')
 const knex = require('./knex/knex.js');
+const verifyToken = require('./tokenAuth');
+const cookieParser = require('cookie-parser');
 
 app.use(cors({
     origin: 'http://localhost:4200',
@@ -12,6 +14,7 @@ app.use(cors({
     allowedHeaders: ['Content-type', 'Authorization'],
 }));
 app.use(express.json());
+app.use(cookieParser());
 
 const db = new Pool({
     user: 'corentin',
@@ -67,7 +70,7 @@ app.get('/client', async (req, res) => {
     }
 })
 
-app.get('/users', async (req, res) => {
+app.get('/users', verifyToken, async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM users');
         res.json(result.rows)
@@ -92,7 +95,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const http = require("node:http");
 const {verify} = require("jsonwebtoken");
-const secretKey = '00YVICAPC11037L';
+require("dotenv").config();
+const secretKey = process.env.SECRET_KEY
 
 app.post('/login', async (req, res) => {
     try {
@@ -138,8 +142,6 @@ app.post('/login', async (req, res) => {
         res.status(500).send('Erreur serveur');
     }
 })
-
-const verifyToken = require('./tokenAuth');
 
 app.post('/form_hook', verifyToken, async (req, res) => {
 

@@ -1,11 +1,13 @@
 const jwt = require('jsonwebtoken');
-const secretKey  = '00YVICAPC11037L';
+const cookieParser = require('cookie-parser');
+require("dotenv").config();
+const secretKey = process.env.SECRET_KEY
 
 const verifyToken = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1];
+    const token = req.cookies['ica_tk'];
 
     if(!token) {
-        return res.status(403).send('Pas de token');
+        return res.status(404).send('Pas de token');
     }
 
     try {
