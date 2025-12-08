@@ -10,7 +10,7 @@ Créer un ficher .env avec dedans `SECRET_KEY=` puis mettez votre secret key uni
 
 ## Run Project 
 
-Se rendre dans le répertoire ica-back puis run `node index.js`
+Se rendre dans le répertoire ica-back puis run `node server.js`
 
 ## Admin et non Admin
 
